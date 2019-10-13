@@ -1,4 +1,4 @@
-# Analiza obnašanja
+Analiza obnašanja
 =================
 ### Uvod
 Naloga poteka s pomočjo službe na Inštututu Jožeta Stefana, Oddeleku za avtomatiko, biokibernetiko in robotiko; zanjo sem zadolžen sam.
