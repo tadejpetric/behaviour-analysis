@@ -52,7 +52,7 @@ public:
         std::cout << "people " << bodies.size() << "\n";
 
         for (const auto& body : bodies) {
-            std::cout << "id " << body.id();
+            std::cout << "body_id(' " << body.id() << " ')\n";
             const auto& all_joints = body.joints();
 
             for (const auto& joint : all_joints) {
@@ -80,7 +80,7 @@ public:
                 18 Neck
                 19 Unknown
                 */
-                std::cout << "type" << static_cast<int>(type) << " ";
+                std::cout << "type " << static_cast<int>(type) << " ";
                 auto pos = joint.world_position();
                 std::cout << "x " << pos.x << " y: " <<  pos.y << " z: " << pos.z;
                 std::cout << "\n";
@@ -90,8 +90,7 @@ public:
 
 };
 
-astra::DepthStream configure_depth(astra::StreamReader& reader)
-{
+astra::DepthStream configure_depth(astra::StreamReader& reader) {
     auto depthStream = reader.stream<astra::DepthStream>();
     astra::ImageStreamMode depthMode;
 
@@ -105,8 +104,7 @@ astra::DepthStream configure_depth(astra::StreamReader& reader)
     return depthStream;
 }
 
-int main(int argc, char** argv)
-{
+int main(int argc, char** argv) {
     astra::initialize();
 
     const char* licenseString = "lol free demo";
@@ -123,8 +121,7 @@ int main(int argc, char** argv)
     BodyDisplay listener;
     reader.add_listener(listener);
 
-    while (true)
-    {
+    while (true) {
         astra_update();
     }
 
