@@ -1,0 +1,20 @@
+# venv files
+share/
+bin/
+include/
+lib/
+lib64/
+pyvenv.cfg
+
+# compiled packages and C packs
+*.so
+__pycache__/
+*.py[cod]
+*.class
+
+
+# vim and emacs autosaves
+*~
+*#
+
+
