@@ -11,13 +11,13 @@ class BodyDisplay: public astra::FrameListener
 
 
     using BufferPtr = std::unique_ptr<uint8_t[]>;
-    BufferPtr displayBuffer_{nullptr};
+    BufferPtr display_buffer{nullptr};
 
-    int depthWidth_{0};
-    int depthHeight_{0};
+    int depth_width{0};
+    int depth_height{0};
 
     using DepthPtr = std::unique_ptr<int16_t[]>;
-    DepthPtr depthData_{nullptr};
+    DepthPtr depth_data{nullptr};
 
 
 public:
