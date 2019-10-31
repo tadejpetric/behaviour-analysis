@@ -42,7 +42,7 @@ public:
         std::cout << "### 0\n";
         std::cout << "fps " <<  fps << "\n";
         std::cout << "ms "<< ms << "\n";
-        std::cout << "### 0\n";
+        std::cout << "### 1\n";
     }
 
     void print_bodies(astra::Frame& frame) {
@@ -89,7 +89,7 @@ public:
                 std::cout << "\n";
             }
         }
-        std::cout << "---\n";
+        std::cout << "--- 1\n";
     }
 
 };

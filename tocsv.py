@@ -1,6 +1,6 @@
 import glob_vars
 import sys
-from collections import defaultdict as ddick
+import csv
 
 
 class world_position:
@@ -20,23 +20,37 @@ def csv_filename(filename):
     return newfilename + ".csv"
 
 
-class state:
-    def __init__(self):
+class State:
+    def __init__(self, handler):
+        self.handler = handler
+        
         self.bodyflag = False
         self.timerflag = False
         
-        self.delay = None
-        self.frameid = None
+        self.delay = 33.0
+        self.frameid = 0
         
-        self.typenum = None
+        self.typenum = 0
         self.positions = [world_position() for _ in range(20)]
-        self.bodyid = None
-        self.fps = None
+        self.bodyid = 0
+        self.fps = 30
+        self.people_cnt = 0
+
+    def write_state(self):
+        row = [self.frameid, self.delay, self.people_cnt, self.bodyid]
+
+        def unpack(pos):
+            return [pos.x, pos.y, pos.z]
+        for pos in self.positions:
+            row.append(unpack(pos))
+        self.handler.writerow(row)
 
 
 def create_patterns():
-    def c_bflag(x):
+    def c_bflag(x, endevent):
         x.bodyflag = not x.bodyflag
+        if endevent:
+            x.write_state()
         return x
     def c_timerflag(x):
         x.timerflag = not x.timerflag
@@ -65,42 +79,55 @@ def create_patterns():
     def c_fps(state, newfps):
         state.fps = newfps
         return state
+    def c_ppl_cnt(state, newppl):
+        state.people_cnt = newppl
+        return state
+
+    def to_float(x):
+        return float(x)
+    def to_int(x):
+        return int(x)
 
     patterns = {
         "###": lambda state: (lambda _: c_timerflag(state)),
-        "---": lambda state: (lambda _: c_bflag(state)),
-        "ms": lambda state: (lambda data: c_delay(state, data)),
-        "fps": lambda state: (lambda data: c_fps(state, data)),
-        "type": lambda state: (lambda data: c_type(state, data)),
-        "x:": lambda state: (lambda data: c_x_coor(state, data)),
-        "y:": lambda state: (lambda data: c_y_coor(state, data)),
-        "z:": lambda state: (lambda data: c_z_coor(state, data)),
-        "body_id": lambda state: (lambda data: c_bodyid(state, data)),
+        "---": lambda state: (lambda data: c_bflag(state, bool(int(data)))),
+        "ms": lambda state: (lambda data: c_delay(state, float(data))),
+        "fps": lambda state: (lambda data: c_fps(state, float(data))),
+        "type": lambda state: (lambda data: c_type(state, int(data))),
+        "x:": lambda state: (lambda data: c_x_coor(state, float(data))),
+        "y:": lambda state: (lambda data: c_y_coor(state, float(data))),
+        "z:": lambda state: (lambda data: c_z_coor(state, float(data))),
+        "frame": lambda state: (lambda data: c_frameid(state, int(data))),
+        "body_id": lambda state: (lambda data: c_bodyid(state, int(data))),
+        "people": lambda state: (lambda data: c_ppl_cnt(state, int(data))),
     }
     return patterns
+
+
+def extract(line):
+    data = line.split(" ", 2)
+    x = data[0]
+    xs = data[1]
+    xss = "" if len(data) == 2 else data[2]
+    return (x, xs, xss)
 
 
 def dispatch(filename):
     newfilename = csv_filename(filename)
 
-    delay = 0
-    frameid = 0
-    
-    with open(filename, "r") as fread, open(newfilename, "w") as fwrite:
-        bodyflag = False
-        timerflag = False
+    patterns = create_patterns()
 
-        patterns = {
-            "###": lambda state: (not tf, bf, "", lambda x: x),
-            "---": lambda tf, bf, line: (tf, not bf, "", lambda x: x)
-        }
-        
+    with open(filename, "r") as fread, open(newfilename, "w") as fwrite:
+        state = State(csv.writer(fwrite))
+
         for line in fread:
             while line != "":
-                action = patterns[line]
-                timerflag, bodyflag, line, func = action(timerflag, bodyflag, line)
-                state = func(state)
-
+                head, data, line = extract(line)
+                # We get a function that takes the value and sets the correct
+                # parameter. Also returns the correct function for
+                # casting the data to the needed type
+                action = patterns[head](state)
+                state = action(data)
 
 
 if __name__ == "__main__":
