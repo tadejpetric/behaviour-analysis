@@ -24,9 +24,9 @@ public:
     virtual void on_frame_ready(astra::StreamReader& reader,
                                 astra::Frame& frame) override
     {
-        print_bodies(frame);
-
         check_fps();
+
+        print_bodies(frame); 
     }
     void check_fps() {
         const float fpsf = .2f;
@@ -39,14 +39,14 @@ public:
 
         const float fps = 1000.f / elapsed;
 
-        std::cout << "###\n";
+        std::cout << "### 0\n";
         std::cout << "fps " <<  fps << "\n";
         std::cout << "ms "<< ms << "\n";
-        std::cout << "###\n";
+        std::cout << "### 0\n";
     }
 
     void print_bodies(astra::Frame& frame) {
-        std::cout << "---\n";
+        std::cout << "--- 0\n";
 
         auto body_frame = frame.get<astra::BodyFrame>();
         const auto& bodies = body_frame.bodies();
@@ -55,7 +55,7 @@ public:
         std::cout << "people " << bodies.size() << "\n";
 
         for (const auto& body : bodies) {
-            std::cout << "body_id(' " << body.id() << " ')\n";
+            std::cout << "body_id " << static_cast<int>(body.id()) << "\n";
             const auto& all_joints = body.joints();
 
             for (const auto& joint : all_joints) {
@@ -85,7 +85,7 @@ public:
                 */
                 std::cout << "type " << static_cast<int>(type) << " ";
                 auto pos = joint.world_position();
-                std::cout << "x " << pos.x << " y: " <<  pos.y << " z: " << pos.z;
+                std::cout << "x: " << pos.x << " y: " <<  pos.y << " z: " << pos.z;
                 std::cout << "\n";
             }
         }
