@@ -39,7 +39,10 @@ public:
 
         const float fps = 1000.f / elapsed;
 
-        std::cout << fps << " fps( " << elapsed_milis << " ms)\n";
+        std::cout << "###\n";
+        std::cout << "fps " <<  fps << "\n";
+        std::cout << "ms "<< ms << "\n";
+        std::cout << "###\n";
     }
 
     void print_bodies(astra::Frame& frame) {
@@ -86,6 +89,7 @@ public:
                 std::cout << "\n";
             }
         }
+        std::cout << "---\n";
     }
 
 };
