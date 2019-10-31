@@ -5,6 +5,7 @@ include/
 lib/
 lib64/
 pyvenv.cfg
+lib64
 
 # compiled packages and C packs
 *.so
