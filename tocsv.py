@@ -1,4 +1,4 @@
-import glob_vars
+# import glob_vars
 import sys
 import csv
 
@@ -23,13 +23,13 @@ def csv_filename(filename):
 class State:
     def __init__(self, handler):
         self.handler = handler
-        
+
         self.bodyflag = False
         self.timerflag = False
-        
+
         self.delay = 33.0
         self.frameid = 0
-        
+
         self.typenum = 0
         self.positions = [world_position() for _ in range(20)]
         self.bodyid = 0
@@ -52,41 +52,46 @@ def create_patterns():
         if endevent:
             x.write_state()
         return x
+
     def c_timerflag(x):
         x.timerflag = not x.timerflag
         return x
+
     def c_type(x, newtype):
         x.typenum = newtype
         return x
+
     def c_x_coor(state, newx):
         curtype = state.typenum
         state.positions[curtype].x = newx
+
     def c_y_coor(state, newy):
         curtype = state.typenum
         state.positions[curtype].y = newy
+
     def c_z_coor(state, newz):
         curtype = state.typenum
         state.positions[curtype].z = newz
+
     def c_delay(state, newdelay):
         state.delay = newdelay
         return state
+
     def c_frameid(state, newid):
         state.frameid = newid
         return state
+
     def c_bodyid(state, newid):
         state.bodyid = newid
         return state
+
     def c_fps(state, newfps):
         state.fps = newfps
         return state
+
     def c_ppl_cnt(state, newppl):
         state.people_cnt = newppl
         return state
-
-    def to_float(x):
-        return float(x)
-    def to_int(x):
-        return int(x)
 
     patterns = {
         "###": lambda state: (lambda _: c_timerflag(state)),
@@ -134,4 +139,4 @@ if __name__ == "__main__":
     if len(sys.argv) != 2:
         print("Priloži datoteko za pretvorbo v csv")
         sys.exit()
-    dispatch(filename)
+    dispatch(sys.argv[1])
