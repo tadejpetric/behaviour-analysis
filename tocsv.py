@@ -37,7 +37,7 @@ class State:
         self.people_cnt = 0
 
     def write_state(self):
-        row = [self.frameid, self.delay, self.people_cnt, self.bodyid]
+        row = [self.frameid, self.fps, self.people_cnt, self.bodyid]
 
         def unpack(pos):
             return [pos.x, pos.y, pos.z]
