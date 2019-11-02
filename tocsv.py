@@ -47,31 +47,34 @@ class State:
 
 
 def create_patterns():
-    def c_bflag(x, endevent):
-        x.bodyflag = not x.bodyflag
+    def c_bflag(state, endevent):
+        state.bodyflag = not state.bodyflag
         if endevent:
-            x.write_state()
-        return x
+            state.write_state()
+        return state
 
-    def c_timerflag(x):
-        x.timerflag = not x.timerflag
-        return x
+    def c_timerflag(state):
+        state.timerflag = not state.timerflag
+        return state
 
-    def c_type(x, newtype):
-        x.typenum = newtype
-        return x
+    def c_type(state, newtype):
+        state.typenum = newtype
+        return state
 
     def c_x_coor(state, newx):
         curtype = state.typenum
         state.positions[curtype].x = newx
+        return state
 
     def c_y_coor(state, newy):
         curtype = state.typenum
         state.positions[curtype].y = newy
+        return state
 
     def c_z_coor(state, newz):
         curtype = state.typenum
         state.positions[curtype].z = newz
+        return state
 
     def c_delay(state, newdelay):
         state.delay = newdelay
@@ -117,12 +120,11 @@ def extract(line):
     return (x, xs, xss)
 
 
-def dispatch(filename):
-    newfilename = csv_filename(filename)
+def dispatch(fin, fout):
 
     patterns = create_patterns()
 
-    with open(filename, "r") as fread, open(newfilename, "w") as fwrite:
+    with open(fin, "r") as fread, open(fout, "w") as fwrite:
         state = State(csv.writer(fwrite))
 
         for line in fread:
@@ -136,7 +138,7 @@ def dispatch(filename):
 
 
 if __name__ == "__main__":
-    if len(sys.argv) != 2:
-        print("Priloži datoteko za pretvorbo v csv")
+    if len(sys.argv) != 3:
+        print("Prilozi datoteko za pretvorbo v csv in izhod")
         sys.exit()
-    dispatch(sys.argv[1])
+    dispatch(sys.argv[1], sys.argv[2])
