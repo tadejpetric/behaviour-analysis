@@ -37,4 +37,4 @@ if __name__ == '__main__':
     elif args.operation == "prepare":
         prepare(args.inputs, args.outputs)
     elif args.operation == "csv":
-        prep_csv(args.inputs, args.outputs)        
+        prep_csv(args.inputs, args.outputs)
