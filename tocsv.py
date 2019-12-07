@@ -125,6 +125,14 @@ def dispatch(fin, fout):
     patterns = create_patterns()
 
     with open(fin, "r") as fread, open(fout, "w") as fwrite:
+        header_row = ["frameid", "fps", "people_cnt", "bodyid",
+                "Head", "ShoulderSpine", "LeftShoulder", "LeftElbow",
+                "LeftHand", "RightShoulder", "RightElbow", "RightHand",
+                "MidSpine", "BaseSpine", "LeftHip", "LeftKnee", "LeftFoot",
+                "RightHip", "RightKnee", "RightFoot", "LeftWrist",
+                "RightWrist", "Neck", "Unknown"]
+        csv.writer(fwrite).writerow(header_row)
+
         state = State(csv.writer(fwrite))
 
         for line in fread:
