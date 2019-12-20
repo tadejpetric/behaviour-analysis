@@ -150,6 +150,7 @@ def dispatch(fin, fout):
     if not executed:
         os.remove(fout)
 
+
 if __name__ == "__main__":
     if len(sys.argv) != 3:
         print("Prilozi datoteko za pretvorbo v csv in izhod")
