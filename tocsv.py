@@ -1,6 +1,9 @@
 # import glob_vars
 import sys
 import csv
+import os
+
+executed = False
 
 
 class world_position:
@@ -37,6 +40,8 @@ class State:
         self.people_cnt = 0
 
     def write_state(self):
+        global executed
+        executed = True
         row = [self.frameid, self.fps, self.people_cnt, self.bodyid]
 
         def unpack(pos):
@@ -121,20 +126,19 @@ def extract(line):
 
 
 def dispatch(fin, fout):
-
+    global executed
+    executed = False
     patterns = create_patterns()
 
     with open(fin, "r") as fread, open(fout, "w") as fwrite:
         header_row = ["frameid", "fps", "people_cnt", "bodyid",
-                "Head", "ShoulderSpine", "LeftShoulder", "LeftElbow",
-                "LeftHand", "RightShoulder", "RightElbow", "RightHand",
-                "MidSpine", "BaseSpine", "LeftHip", "LeftKnee", "LeftFoot",
-                "RightHip", "RightKnee", "RightFoot", "LeftWrist",
-                "RightWrist", "Neck", "Unknown"]
+                      "Head", "ShoulderSpine", "LeftShoulder", "LeftElbow",
+                      "LeftHand", "RightShoulder", "RightElbow", "RightHand",
+                      "MidSpine", "BaseSpine", "LeftHip", "LeftKnee", "LeftFoot",
+                      "RightHip", "RightKnee", "RightFoot", "LeftWrist",
+                      "RightWrist", "Neck", "Unknown"]
         csv.writer(fwrite).writerow(header_row)
-
         state = State(csv.writer(fwrite))
-
         for line in fread:
             while line != "":
                 head, data, line = extract(line)
@@ -143,7 +147,8 @@ def dispatch(fin, fout):
                 # casting the data to the needed type
                 action = patterns[head](state)
                 state = action(data)
-
+    if not executed:
+        os.remove(fout)
 
 if __name__ == "__main__":
     if len(sys.argv) != 3:

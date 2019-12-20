@@ -5,6 +5,8 @@ def dispatch(in_name, out_name):
     with open(in_name, 'r') as inf, open(out_name, 'w') as outf:
         working_string = ""
         peoplecount = 0
+        #frameid = 0
+        start = True
         for line in inf:
             try:
                 keyword, rest = line.split(' ', 1)
@@ -14,7 +16,15 @@ def dispatch(in_name, out_name):
             if keyword == "Warning:":
                 continue
             elif keyword == "people":
+                start = True
                 peoplecount = int(rest.strip())
+            #elif keyword == "frame":
+            #    frameid = int(rest.strip())
+            elif keyword == "body_id":
+                start = not start
+                if start:
+                    working_string += "--- 1\n--- 0\n"
+                
             working_string += line
             if line == "--- 1\n":
                 if peoplecount == 2:
