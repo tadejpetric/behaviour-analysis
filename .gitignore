@@ -12,7 +12,7 @@ lib64
 __pycache__/
 *.py[cod]
 *.class
-
+.ipynb_checkpoints
 
 # vim and emacs autosaves
 *~
