@@ -34,7 +34,7 @@ public:
         const auto now = std::chrono::high_resolution_clock::now();
         const float elapsed = std::chrono::duration_cast<std::chrono::milliseconds>(now - prev).count();
 
-        elapsed_milis = elapsed * fpsf + elapsed_milis * (1.f - fpsf);
+        ms = elapsed * fpsf + elapsed_milis * (1.f - fpsf);
         prev = now;
 
         const float fps = 1000.f / elapsed;
